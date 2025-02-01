@@ -4,12 +4,25 @@
   become: true
 
   tasks:
-    - name: Make sshd config file immutable as it's being modified by OpenMediaVault otherwise
+    # During initialization of the Salt environment, OMV overwrites the sshd config
+    # with its own default config. We have to avoid this as it's breaking the
+    # vagrant ssh connection otherwise. This throws an error during installation
+    # of the OpenMediaVault package, but it continues anyway as far as I see.
+    # See the following file for the exact code we work around here:
+    # https://github.com/openmediavault/openmediavault/blob/master/deb/openmediavault/srv/salt/omv/deploy/ssh/20sshd_config.sls
+    - name: Make sshd config file immutable
       ansible.builtin.file:
         path: /etc/ssh/sshd_config
         attributes: +i
 
-    - name: Make authorized_keys file immutable as it's being deleted by salt otherwise
+    # During initialization of the Salt environment, OMV cleans all  ~/.ssh directories
+    # to have a known environment for the beginning. We have to avoid this for the
+    # default vagrant user's authorized_keys file as it's breaking the vagrant ssh
+    # connection otherwise. This doesn't throw an error during installation
+    # of OpenMediaVault somehow.
+    # See the following file for the exact code we work around here:
+    # https://github.com/openmediavault/openmediavault/blob/master/deb/openmediavault/srv/salt/omv/deploy/ssh/10authorized_keys.sls
+    - name: Make authorized_keys file immutable
       ansible.builtin.file:
         path: /home/vagrant/.ssh/authorized_keys
         attributes: +i
@@ -29,8 +42,8 @@
         state: present
 
     - name: Add OpenMediaVault repository to apt sources
-      ansible.builtin.copy:
-        src: /vagrant/provisioning/apt/sources.list.d/openmediavault.list
+      ansible.builtin.template:
+        src: /vagrant/provisioning/apt/sources.list.d/openmediavault.list.j2
         dest: /etc/apt/sources.list.d/openmediavault.list
         owner: root
         group: root
@@ -63,15 +76,13 @@
           - git
           - git-flow
 
-    - name: Install PHP
+    - name: Install necessary PHP modules for development not being installed by OpenMediaVault itself
       ansible.builtin.apt:
         install_recommends: no
         pkg:
           - composer
-          - php8.2-cli
           - php8.2-libvirt-php
           - php-xdebug
-          - php-xml
           - php-libvirt-php
 
     - name: Add Debian backport repository
@@ -79,14 +90,16 @@
         repo: deb https://deb.debian.org/debian {{ ansible_distribution_release }}-backports main
         filename: debian-backports
         state: present
+        when: use_backports_for_qemu
 
     - name: Pin QEMU packages to backports repository
-      ansible.builtin.copy:
-        src: /vagrant/provisioning/apt/preferences.d/99qemu-from-backports
+      ansible.builtin.template:
+        src: /vagrant/provisioning/apt/preferences.d/99qemu-from-backports.j2
         dest: /etc/apt/preferences.d/99qemu-from-backports
         owner: root
         group: root
         mode: '0644'
+        when: use_backports_for_qemu
 
     - name: Install QEMU
       ansible.builtin.apt:

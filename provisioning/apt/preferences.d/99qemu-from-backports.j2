@@ -1,13 +1,15 @@
+# {{ ansible_managed }}
+
 Package: src:qemu
-Pin: release n=bookworm-backports
+Pin: release n={{ ansible_distribution_release }}-backports
 Pin-Priority: 900
 
 # Necessary due to dependency of qemu-system-x86
 Package: src:seabios
-Pin: release n=bookworm-backports
+Pin: release n={{ ansible_distribution_release }}-backports
 Pin-Priority: 900
 
 # Necessary due to dependency of qemu-system-riscv
 Package: src:opensbi
-Pin: release n=bookworm-backports
+Pin: release n={{ ansible_distribution_release }}-backports
 Pin-Priority: 900
