@@ -45,6 +45,9 @@
     - name: Initialize OpenMediaVault database
       ansible.builtin.command: /usr/sbin/omv-confdbadm populate
 
+    - name: Deploy OpenMediaVault network configuration
+      ansible.builtin.command: /usr/sbin/omv-salt deploy run systemd-networkd
+
     - name: Install vim
       ansible.builtin.apt:
         pkg:
