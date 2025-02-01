@@ -27,19 +27,13 @@
         path: /home/vagrant/.ssh/authorized_keys
         attributes: +i
 
-    - name: Install OpenMediaVault prerequisites
-      ansible.builtin.apt:
-        update_cache: yes
-        install_recommends: no
-        pkg:
-          - gnupg
-          - wget
-
     - name: Download OpenMediaVault archive key
-      ansible.builtin.apt_key:
+      ansible.builtin.get_url:
         url: https://packages.openmediavault.org/public/archive.key
-        keyring: /usr/share/keyrings/openmediavault-archive-keyring.gpg
-        state: present
+        dest: /usr/share/keyrings/openmediavault-archive-keyring.gpg
+        owner: root
+        group: root
+        mode: '0644'
 
     - name: Add OpenMediaVault repository to apt sources
       ansible.builtin.template:
@@ -55,7 +49,6 @@
         install_recommends: no
         pkg:
           - openmediavault
-          - openmediavault-keyring
 
     - name: Initialize OpenMediaVault database
       ansible.builtin.command: /usr/sbin/omv-confdbadm populate
@@ -90,7 +83,7 @@
         repo: deb https://deb.debian.org/debian {{ ansible_distribution_release }}-backports main
         filename: debian-backports
         state: present
-        when: use_backports_for_qemu
+      when: use_backports_for_qemu
 
     - name: Pin QEMU packages to backports repository
       ansible.builtin.template:
@@ -99,7 +92,7 @@
         owner: root
         group: root
         mode: '0644'
-        when: use_backports_for_qemu
+      when: use_backports_for_qemu
 
     - name: Install QEMU
       ansible.builtin.apt:
