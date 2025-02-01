@@ -1,0 +1,34 @@
+{
+    "name": "ddreschner/openmediavault-qemu",
+    "description": "OpenMediaVault plugin for using virtual machines based on QEMU",
+    "type": "project",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "David Dreschner",
+            "email": "github-2017@dreschner.net"
+        }
+    ],
+    "autoload": {
+      "classmap": [
+        "src/usr/share"
+      ]
+    },
+    "include-path": [
+      "usr/share/php"
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/DerDreschner/openmediavault-composer-package"
+        }
+    ],
+    "require": {
+        "php": "^8.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11",
+        "ext-dom": "*",
+        "derdreschner/openmediavault-composer-package": "dev-main"
+    }
+}

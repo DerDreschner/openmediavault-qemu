@@ -1,0 +1,100 @@
+---
+- name: Initialize OpenMediaVault development machine
+  hosts: openmediavault-dev
+  become: true
+
+  tasks:
+    - name: Add Debian backport repository
+      ansible.builtin.apt_repository:
+        repo: deb https://deb.debian.org/debian {{ ansible_distribution_release }}-backports main
+        filename: debian-backports
+        state: present
+
+    - name: Pin QEMU packages to backports repository
+      ansible.builtin.copy:
+        src: ./provisioning/apt/preferences.d/99qemu-from-backports
+        dest: /etc/apt/preferences.d/99qemu-from-backports
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Install QEMU
+      ansible.builtin.apt:
+        update_cache: yes
+        pkg:
+          - qemu-system
+
+    - name: Install UEFI firmware for all platforms
+      ansible.builtin.apt:
+        pkg:
+          - ovmf
+          - ovmf-ia32
+          - qemu-efi-aarch64
+          - qemu-efi-arm
+
+    - name: Install libvirt
+      ansible.builtin.apt:
+        pkg:
+          - libvirt-daemon-driver-qemu
+
+    - name: Install vim
+      ansible.builtin.apt:
+        pkg:
+          - vim
+
+    - name: Install PHP
+      ansible.builtin.apt:
+        pkg:
+          - composer
+          - php8.2-cli
+          - php8.2-libvirt-php
+          - php-xdebug
+          - php-xml
+          - php-libvirt-php
+
+    - name: Install git
+      ansible.builtin.apt:
+        pkg:
+          - git
+          - git-flow
+
+    - name: Make sshd config file immutable as it's being modified by OpenMediaVault otherwise
+      ansible.builtin.file:
+        path: /etc/ssh/sshd_config
+        attributes: +i
+
+    - name: Make authorized_keys file immutable as it's being deleted by salt otherwise
+      ansible.builtin.file:
+        path: /home/vagrant/.ssh/authorized_keys
+        attributes: +i
+
+    - name: Install OpenMediaVault prerequisites
+      ansible.builtin.apt:
+        update_cache: yes
+        pkg:
+          - gnupg
+          - wget
+
+    - name: Download OpenMediaVault archive key
+      ansible.builtin.apt_key:
+        url: https://packages.openmediavault.org/public/archive.key
+        keyring: /usr/share/keyrings/openmediavault-archive-keyring.gpg
+        state: present
+
+    - name: Add OpenMediaVault repository to apt sources
+      ansible.builtin.copy:
+        src: ./provisioning/apt/sources.list.d/openmediavault.list
+        dest: /etc/apt/sources.list.d/openmediavault.list
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Install OpenMediaVault
+      ansible.builtin.apt:
+        update_cache: yes
+        pkg:
+          - openmediavault
+          - openmediavault-keyring
+
+    - name: Initialize OpenMediaVault database
+      ansible.builtin.command: /usr/sbin/omv-confdbadm populate
