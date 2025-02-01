@@ -17,6 +17,7 @@
     - name: Install OpenMediaVault prerequisites
       ansible.builtin.apt:
         update_cache: yes
+        install_recommends: no
         pkg:
           - gnupg
           - wget
@@ -38,6 +39,7 @@
     - name: Install OpenMediaVault
       ansible.builtin.apt:
         update_cache: yes
+        install_recommends: no
         pkg:
           - openmediavault
           - openmediavault-keyring
@@ -50,17 +52,20 @@
 
     - name: Install vim
       ansible.builtin.apt:
+        install_recommends: no
         pkg:
           - vim
 
     - name: Install git
       ansible.builtin.apt:
+        install_recommends: no
         pkg:
           - git
           - git-flow
 
     - name: Install PHP
       ansible.builtin.apt:
+        install_recommends: no
         pkg:
           - composer
           - php8.2-cli
@@ -86,11 +91,13 @@
     - name: Install QEMU
       ansible.builtin.apt:
         update_cache: yes
+        install_recommends: no
         pkg:
           - qemu-system
 
     - name: Install UEFI firmware for all platforms
       ansible.builtin.apt:
+        install_recommends: no
         pkg:
           - ovmf
           - ovmf-ia32
@@ -99,5 +106,6 @@
 
     - name: Install libvirt
       ansible.builtin.apt:
+        install_recommends: no
         pkg:
           - libvirt-daemon-driver-qemu
