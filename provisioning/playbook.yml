@@ -1,42 +1,9 @@
 ---
 - name: Initialize OpenMediaVault development machine
-  hosts: openmediavault-dev
+  hosts: all
   become: true
 
   tasks:
-    - name: Add Debian backport repository
-      ansible.builtin.apt_repository:
-        repo: deb https://deb.debian.org/debian {{ ansible_distribution_release }}-backports main
-        filename: debian-backports
-        state: present
-
-    - name: Pin QEMU packages to backports repository
-      ansible.builtin.copy:
-        src: ./provisioning/apt/preferences.d/99qemu-from-backports
-        dest: /etc/apt/preferences.d/99qemu-from-backports
-        owner: root
-        group: root
-        mode: '0644'
-
-    - name: Install QEMU
-      ansible.builtin.apt:
-        update_cache: yes
-        pkg:
-          - qemu-system
-
-    - name: Install UEFI firmware for all platforms
-      ansible.builtin.apt:
-        pkg:
-          - ovmf
-          - ovmf-ia32
-          - qemu-efi-aarch64
-          - qemu-efi-arm
-
-    - name: Install libvirt
-      ansible.builtin.apt:
-        pkg:
-          - libvirt-daemon-driver-qemu
-
     - name: Install vim
       ansible.builtin.apt:
         pkg:
@@ -83,7 +50,7 @@
 
     - name: Add OpenMediaVault repository to apt sources
       ansible.builtin.copy:
-        src: ./provisioning/apt/sources.list.d/openmediavault.list
+        src: /vagrant/provisioning/apt/sources.list.d/openmediavault.list
         dest: /etc/apt/sources.list.d/openmediavault.list
         owner: root
         group: root
@@ -98,3 +65,36 @@
 
     - name: Initialize OpenMediaVault database
       ansible.builtin.command: /usr/sbin/omv-confdbadm populate
+
+    - name: Add Debian backport repository
+      ansible.builtin.apt_repository:
+        repo: deb https://deb.debian.org/debian {{ ansible_distribution_release }}-backports main
+        filename: debian-backports
+        state: present
+
+    - name: Pin QEMU packages to backports repository
+      ansible.builtin.copy:
+        src: /vagrant/provisioning/apt/preferences.d/99qemu-from-backports
+        dest: /etc/apt/preferences.d/99qemu-from-backports
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Install QEMU
+      ansible.builtin.apt:
+        update_cache: yes
+        pkg:
+          - qemu-system
+
+    - name: Install UEFI firmware for all platforms
+      ansible.builtin.apt:
+        pkg:
+          - ovmf
+          - ovmf-ia32
+          - qemu-efi-aarch64
+          - qemu-efi-arm
+
+    - name: Install libvirt
+      ansible.builtin.apt:
+        pkg:
+          - libvirt-daemon-driver-qemu
