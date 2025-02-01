@@ -4,28 +4,6 @@
   become: true
 
   tasks:
-    - name: Install vim
-      ansible.builtin.apt:
-        update_cache: yes
-        pkg:
-          - vim
-
-    - name: Install PHP
-      ansible.builtin.apt:
-        pkg:
-          - composer
-          - php8.2-cli
-          - php8.2-libvirt-php
-          - php-xdebug
-          - php-xml
-          - php-libvirt-php
-
-    - name: Install git
-      ansible.builtin.apt:
-        pkg:
-          - git
-          - git-flow
-
     - name: Make sshd config file immutable as it's being modified by OpenMediaVault otherwise
       ansible.builtin.file:
         path: /etc/ssh/sshd_config
@@ -38,6 +16,7 @@
 
     - name: Install OpenMediaVault prerequisites
       ansible.builtin.apt:
+        update_cache: yes
         pkg:
           - gnupg
           - wget
@@ -65,6 +44,27 @@
 
     - name: Initialize OpenMediaVault database
       ansible.builtin.command: /usr/sbin/omv-confdbadm populate
+
+    - name: Install vim
+      ansible.builtin.apt:
+        pkg:
+          - vim
+
+    - name: Install git
+      ansible.builtin.apt:
+        pkg:
+          - git
+          - git-flow
+
+    - name: Install PHP
+      ansible.builtin.apt:
+        pkg:
+          - composer
+          - php8.2-cli
+          - php8.2-libvirt-php
+          - php-xdebug
+          - php-xml
+          - php-libvirt-php
 
     - name: Add Debian backport repository
       ansible.builtin.apt_repository:
