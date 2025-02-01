@@ -6,6 +6,7 @@
   tasks:
     - name: Install vim
       ansible.builtin.apt:
+        update_cache: yes
         pkg:
           - vim
 
@@ -37,7 +38,6 @@
 
     - name: Install OpenMediaVault prerequisites
       ansible.builtin.apt:
-        update_cache: yes
         pkg:
           - gnupg
           - wget
