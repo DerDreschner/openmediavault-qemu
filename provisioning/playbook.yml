@@ -30,6 +30,7 @@
         owner: root
         group: root
         mode: '0644'
+        force: false
 
     - name: Install OpenMediaVault
       ansible.builtin.apt:
@@ -37,12 +38,15 @@
         install_recommends: no
         pkg:
           - openmediavault
+      register: omv_install
 
     - name: Initialize OpenMediaVault database
       ansible.builtin.command: /usr/sbin/omv-confdbadm populate
+      when: omv_install is changed
 
     - name: Deploy OpenMediaVault network configuration
       ansible.builtin.command: /usr/sbin/omv-salt deploy run systemd-networkd
+      when: omv_install is changed
 
     - name: Install vim
       ansible.builtin.apt:
