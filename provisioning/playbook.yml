@@ -4,28 +4,12 @@
   become: true
 
   tasks:
-    # During initialization of the Salt environment, OMV overwrites the sshd config
-    # with its own default config. We have to avoid this as it's breaking the
-    # vagrant ssh connection otherwise. This throws an error during installation
-    # of the OpenMediaVault package, but it continues anyway as far as I see.
-    # See the following file for the exact code we work around here:
-    # https://github.com/openmediavault/openmediavault/blob/master/deb/openmediavault/srv/salt/omv/deploy/ssh/20sshd_config.sls
-    - name: Make sshd config file immutable
-      ansible.builtin.file:
-        path: /etc/ssh/sshd_config
-        attributes: +i
-
-    # During initialization of the Salt environment, OMV cleans all  ~/.ssh directories
-    # to have a known environment for the beginning. We have to avoid this for the
-    # default vagrant user's authorized_keys file as it's breaking the vagrant ssh
-    # connection otherwise. This doesn't throw an error during installation
-    # of OpenMediaVault somehow.
-    # See the following file for the exact code we work around here:
-    # https://github.com/openmediavault/openmediavault/blob/master/deb/openmediavault/srv/salt/omv/deploy/ssh/10authorized_keys.sls
-    - name: Make authorized_keys file immutable
-      ansible.builtin.file:
-        path: /home/vagrant/.ssh/authorized_keys
-        attributes: +i
+    - name: Add vagrant user to _ssh group
+      ansible.builtin.user:
+        name: vagrant
+        append: true
+        groups:
+          - _ssh
 
     - name: Install requirements for using ansible.builtin.apt_key
       ansible.builtin.apt:
@@ -89,14 +73,22 @@
         owner: root
         group: root
         mode: '0644'
-      when: use_backports_for_qemu
+      when: use_backports_for_qemu|bool
 
     - name: Install QEMU
-      ansible.builtin.apt:
-        install_recommends: no
-        pkg:
-          - qemu-system
-          - qemu-system-modules-spice
+      block:
+        - name: Try installation of QEMU from backports
+          ansible.builtin.apt:
+            install_recommends: no
+            pkg:
+              - qemu-system
+              - qemu-system-modules-spice
+      rescue:
+        - name: Install QEMU without qemu-system-modules-spice
+          ansible.builtin.apt:
+            install_recommends: no
+            pkg:
+              - qemu-system
 
     - name: Install UEFI firmware for all platforms
       ansible.builtin.apt:

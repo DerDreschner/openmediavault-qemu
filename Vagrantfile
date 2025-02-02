@@ -66,7 +66,7 @@ Vagrant.configure("2") do |config|
       "default" => {
         "ansible_python_interpreter" => "auto_silent",
         "omv_version" => "sandworm",
-        "use_backports_for_qemu" => true
+        "use_backports_for_qemu" => false
       }
     }
     ansible.playbook = "/vagrant/provisioning/playbook.yml"
