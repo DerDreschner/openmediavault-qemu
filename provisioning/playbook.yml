@@ -70,8 +70,10 @@
         pkg:
           - composer
           - php8.2-libvirt-php
-          - php-xdebug
           - php-libvirt-php
+          - php-xdebug
+          - php-zip
+          - unzip
 
     - name: Pin QEMU packages to backports repository
       ansible.builtin.template:
