@@ -3,12 +3,12 @@
   <component name="JsonSchemaMappingsProjectConfiguration">
     <state>
       <map>
-        <entry key="rpc.ssh">
+        <entry key="rpc.ssh.set">
           <value>
             <SchemaInfo>
               <option name="generatedName" value="New Schema" />
-              <option name="name" value="rpc.ssh" />
-              <option name="relativePathToSchema" value="provisioning/.schema/rpc.ssh.json" />
+              <option name="name" value="rpc.ssh.set" />
+              <option name="relativePathToSchema" value="vendor/derdreschner/openmediavault-composer-package/src/schemas/rpc.ssh.set.json" />
               <option name="patterns">
                 <list>
                   <Item>

@@ -10,12 +10,11 @@
         }
     ],
     "autoload": {
-      "classmap": [
-        "src/usr/share"
-      ]
+        "classmap": [
+            "src/php"
+        ]
     },
     "include-path": [
-      "usr/share/php"
     ],
     "repositories": [
         {
@@ -27,8 +26,9 @@
         "php": "^8.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^11",
         "ext-dom": "*",
-        "derdreschner/openmediavault-composer-package": "dev-main"
+        "ext-zip": "*",
+        "derdreschner/openmediavault-composer-package": "dev-main",
+        "phpunit/phpunit": "^11"
     }
 }

@@ -1,10 +1,10 @@
 {
-  "enable": true,
-  "port": 22,
-  "passwordauthentication": false,
-  "pubkeyauthentication": true,
-  "permitrootlogin": false,
-  "tcpforwarding": true,
-  "compression": true,
-  "extraoptions": "ClientAliveInterval 120"
+    "enable": true,
+    "port": 22,
+    "passwordauthentication": false,
+    "pubkeyauthentication": true,
+    "permitrootlogin": false,
+    "tcpforwarding": true,
+    "compression": true,
+    "extraoptions": "ClientAliveInterval 120"
 }

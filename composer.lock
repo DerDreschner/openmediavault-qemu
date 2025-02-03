@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2c7f19a5422c3e1394eebafc923d3ebf",
+    "content-hash": "0d7f92dd383be92961cfc1d7b43770db",
     "packages": [],
     "packages-dev": [
         {
@@ -13,17 +13,31 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DerDreschner/openmediavault-composer-package.git",
-                "reference": "c1b793a8fb263892085eae5942cec7915c566e67"
+                "reference": "4ef6dee07a6485545cb5ff874a61be58cb96413f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DerDreschner/openmediavault-composer-package/zipball/c1b793a8fb263892085eae5942cec7915c566e67",
-                "reference": "c1b793a8fb263892085eae5942cec7915c566e67",
+                "url": "https://api.github.com/repos/DerDreschner/openmediavault-composer-package/zipball/4ef6dee07a6485545cb5ff874a61be58cb96413f",
+                "reference": "4ef6dee07a6485545cb5ff874a61be58cb96413f",
                 "shasum": ""
             },
             "require": {
+                "ext-bcmath": "*",
+                "ext-dom": "*",
+                "ext-fileinfo": "*",
+                "ext-gettext": "*",
+                "ext-libxml": "*",
                 "ext-mbstring": "*",
+                "ext-pcntl": "*",
+                "ext-posix": "*",
+                "ext-simplexml": "*",
+                "ext-sockets": "*",
+                "ext-sysvsem": "*",
+                "ext-yaml": "*",
                 "php": "^8.2"
+            },
+            "require-dev": {
+                "illuminate/collections": "*"
             },
             "default-branch": true,
             "type": "library",
@@ -49,7 +63,7 @@
                 "source": "https://github.com/DerDreschner/openmediavault-composer-package/tree/main",
                 "issues": "https://github.com/DerDreschner/openmediavault-composer-package/issues"
             },
-            "time": "2025-01-30T01:31:16+00:00"
+            "time": "2025-02-03T06:30:57+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -1751,7 +1765,8 @@
         "php": "^8.2"
     },
     "platform-dev": {
-        "ext-dom": "*"
+        "ext-dom": "*",
+        "ext-zip": "*"
     },
     "plugin-api-version": "2.3.0"
 }
