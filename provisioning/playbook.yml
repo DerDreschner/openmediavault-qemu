@@ -24,17 +24,12 @@
         keyring: /usr/share/keyrings/openmediavault-archive-keyring.gpg
 
     - name: Add OpenMediaVault repository to apt sources
-      ansible.builtin.template:
-        src: /vagrant/provisioning/apt/sources.list.d/openmediavault.list.j2
-        dest: /etc/apt/sources.list.d/openmediavault.list
-        owner: root
-        group: root
-        mode: '0644'
-        force: false
+      ansible.builtin.apt_repository:
+        repo: deb [signed-by=/usr/share/keyrings/openmediavault-archive-keyring.gpg] https://packages.openmediavault.org/public {{ omv_version }} main
+        filename: openmediavault
 
     - name: Install OpenMediaVault
       ansible.builtin.apt:
-        update_cache: yes
         install_recommends: no
         pkg:
           - openmediavault
