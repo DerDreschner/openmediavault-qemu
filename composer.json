@@ -29,6 +29,7 @@
         "ext-dom": "*",
         "ext-zip": "*",
         "derdreschner/openmediavault-composer-package": "dev-main",
-        "phpunit/phpunit": "^11"
+        "phpunit/phpunit": "^11",
+        "jetbrains/phpstorm-attributes": "^1.2"
     }
 }
