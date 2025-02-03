@@ -43,6 +43,14 @@
       ansible.builtin.command: /usr/sbin/omv-salt deploy run systemd-networkd
       when: omv_install is changed
 
+    - name: Set new sshd config in OpenMediaVault database
+      ansible.builtin.shell: /usr/sbin/omv-confdbadm update conf.service.ssh - < /vagrant/provisioning/omv_sshd_config.json
+      when: omv_install is changed
+
+    - name: Deploy OpenMediaVault sshd configuration
+      ansible.builtin.command: /usr/sbin/omv-salt deploy run ssh
+      when: omv_install is changed
+
     - name: Install vim
       ansible.builtin.apt:
         install_recommends: no
