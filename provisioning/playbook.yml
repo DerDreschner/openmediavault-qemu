@@ -75,6 +75,13 @@
           - php-zip
           - unzip
 
+    - name: Install Node.js and npm for running gulp.js tasks
+      ansible.builtin.apt:
+        install_recommends: no
+        pkg:
+          - nodejs
+          - npm
+
     - name: Pin QEMU packages to backports repository
       ansible.builtin.template:
         src: /vagrant/provisioning/apt/preferences.d/99qemu-from-backports.j2

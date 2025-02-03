@@ -2,7 +2,14 @@
 .vagrant/
 
 # Composer working directory
-/vendor/
+vendor/
+
+# Node working directory
+node_modules/
+
+#
+# JetBrains IDEs
+#
 
 # User-specific stuff
 .idea/**/workspace.xml
