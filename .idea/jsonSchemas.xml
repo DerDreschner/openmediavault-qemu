@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JsonSchemaMappingsProjectConfiguration">
+    <state>
+      <map>
+        <entry key="rpc.ssh">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="rpc.ssh" />
+              <option name="relativePathToSchema" value="provisioning/.schema/rpc.ssh.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="provisioning/omv_sshd_config.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+      </map>
+    </state>
+  </component>
+</project>
